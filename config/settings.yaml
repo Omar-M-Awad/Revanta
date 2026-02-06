@@ -1,0 +1,178 @@
+# ============================================================
+# REVANTA - Configuration Settings
+# ============================================================
+# Project-wide configuration for paths, thresholds, and parameters
+# ============================================================
+
+project:
+  name: "Revanta"
+  version: "1.0.0"
+  description: "End-to-End Retail Analytics Platform"
+  environment: "development"  # development, staging, production
+
+# ============================================================
+# DATA PATHS
+# ============================================================
+paths:
+  base_dir: "./"
+  raw_data: "./data/raw"
+  processed_data: "./data/processed"
+  database: "./database/revanta.db"
+  logs: "./etl/logs"
+  sql_staging: "./sql/staging"
+  sql_marts: "./sql/marts"
+  sql_analysis: "./sql/analysis"
+
+# ============================================================
+# DATABASE CONFIGURATION
+# ============================================================
+database:
+  type: "sqlite"
+  connection:
+    database: "./database/revanta.db"
+  options:
+    timeout: 30
+    check_same_thread: false
+    isolation_level: null
+
+# ============================================================
+# DATA FILES
+# ============================================================
+data_files:
+  orders: "olist_orders_dataset.csv"
+  customers: "olist_customers_dataset.csv"
+  order_items: "olist_order_items_dataset.csv"
+  products: "olist_products_dataset.csv"
+  category_translation: "product_category_name_translation.csv"
+
+# ============================================================
+# RFM ANALYSIS CONFIGURATION
+# ============================================================
+rfm:
+  recency_threshold_days: 90  # Days to consider customer active
+  frequency_threshold_min: 2  # Minimum purchases for "frequent"
+  monetary_threshold_median: true  # Use median as threshold
+  
+  # RFM Segment Definitions (R-F-M where 1=low, 5=high)
+  segments:
+    champions: "5-5-5"  # Best customers
+    loyal: "4-5-4"      # Loyal customers
+    potential: "3-4-3"  # Potential customers
+    at_risk: "2-2-2"    # At risk of churn
+    lost: "1-1-1"       # Lost customers
+
+# ============================================================
+# CUSTOMER RISK SCORING
+# ============================================================
+risk_scoring:
+  # Recency-based thresholds (days since last purchase)
+  recency_thresholds:
+    low_risk: 30        # <= 30 days
+    medium_risk: 60     # 31-60 days
+    high_risk: 90       # > 90 days
+  
+  # Frequency thresholds (total purchases)
+  frequency_thresholds:
+    high_frequency: 5   # >= 5 purchases
+    medium_frequency: 2 # 2-4 purchases
+    low_frequency: 1    # 1 purchase
+  
+  # Monetary thresholds (lifetime value)
+  monetary_thresholds:
+    use_percentile: true
+    high_percentile: 75      # Top 25%
+    medium_percentile: 50    # 25-50%
+    low_percentile: 25       # Bottom 25%
+  
+  # Risk scoring weights
+  weights:
+    recency: 0.5
+    frequency: 0.3
+    monetary: 0.2
+  
+  # Risk alert thresholds
+  alert_threshold: 0.7  # Risk score > 0.7 triggers alert
+
+# ============================================================
+# MONTH-OVER-MONTH GROWTH CONFIGURATION
+# ============================================================
+growth_metrics:
+  calculate_mom: true           # Enable MoM calculations
+  include_prediction: false     # Include growth prediction
+  prediction_months: 3          # Months for trend analysis
+
+# ============================================================
+# DATA QUALITY RULES
+# ============================================================
+data_quality:
+  # Orders validation
+  orders:
+    valid_statuses: ["delivered", "shipped", "approved"]
+    min_rows: 100
+    check_duplicates: true
+  
+  # Customers validation
+  customers:
+    min_rows: 100
+    check_unique_id: true
+  
+  # Order Items validation
+  order_items:
+    min_price: 0.01
+    min_rows: 100
+    check_freight_non_negative: true
+  
+  # Products validation
+  products:
+    min_rows: 100
+    check_unique_id: true
+  
+  # Category translation validation
+  category_translation:
+    min_rows: 1
+    check_complete: true
+
+# ============================================================
+# LOGGING CONFIGURATION
+# ============================================================
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+  file_retention_days: 30
+  
+  # Log file settings
+  file_logging:
+    enabled: true
+    directory: "./etl/logs"
+    prefix: "revanta_"
+    timestamp_format: "%Y%m%d_%H%M%S"
+
+# ============================================================
+# PERFORMANCE TUNING
+# ============================================================
+performance:
+  # Batch size for loading
+  batch_size: 10000
+  
+  # Connection pooling
+  connection_pool_size: 5
+  
+  # Chunk size for pandas operations
+  chunk_size: 50000
+  
+  # Enable caching
+  enable_caching: false
+
+# ============================================================
+# FEATURE FLAGS
+# ============================================================
+features:
+  enable_rfm_analysis: true
+  enable_risk_scoring: true
+  enable_mom_growth: true
+  enable_data_validation: true
+  enable_sql_transformations: true
+  
+# ============================================================
+# END OF CONFIGURATION
+# ============================================================

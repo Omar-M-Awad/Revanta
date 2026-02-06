@@ -1,0 +1,24 @@
+-- ============================================================
+-- REVANTA - FACT SALES (Mart Layer)
+-- ============================================================
+-- Purpose: Create fact table for sales analysis
+-- Grain: 1 row per order
+-- Note: This is built by Python run_sql_transformations.py
+-- ============================================================
+
+-- This table is built programmatically by run_sql_transformations.py
+-- But keeping this file as reference for the Mart definition
+
+-- Structure:
+-- sales_id (PK)
+-- order_id (UK)
+-- customer_sk (FK to dim_customers)
+-- order_date_sk (FK to dim_date)
+-- order_status
+-- total_price
+-- total_freight
+-- total_order_value
+-- order_item_count
+-- days_to_delivery
+-- is_delivered
+-- created_at, updated_at

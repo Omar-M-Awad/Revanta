@@ -1,0 +1,34 @@
+{
+  "name": "Revanta Analytics",
+  "background": "#F7F9FC",
+  "foreground": "#2C3E50",
+  "tableAccent": "#1F6AE1",
+  "dataColors": [
+    "#1F6AE1",
+    "#4FD1C5",
+    "#2ECC71",
+    "#F1C40F",
+    "#E74C3C",
+    "#9B59B6"
+  ],
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontFamily": "Segoe UI",
+            "fontSize": 14,
+            "fontColor": "#0F2A44",
+            "fontWeight": "bold"
+          }
+        ],
+        "labels": [
+          {
+            "fontColor": "#2C3E50",
+            "fontSize": 11
+          }
+        ]
+      }
+    }
+  }
+}
